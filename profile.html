@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>JavaScript and the GitHub API</h1>
+
+    <div id="results"></div>
+
+    <script>
+
+    // https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-a-user
+
+    const userEndpoint = "https://api.github.com/users/codeadamca";
+
+    /*
+    fetch(userEndpoint)
+        .then((response) => {
+            console.log(response);
+            return response.json();
+        })
+        .then((json) => {
+            console.log(json);
+            let results = document.getElementById("results");
+            results.innerHTML = '<img src="' + 
+            json.avatar_url + '" width="200">' +
+            '<h2>' + json.login + '</h2>' + 
+            '<a href="' + json.html_url + '">' + json.html_url + '</a>';
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    */
+
+    
+
+    function getData(url) {
+        let fetchPromise = fetch(userEndpoint);
+        return fetchPromise;
+    }
+
+    function convertToJson(string) {
+        let json = string.json();
+        return json;
+    }
+
+    function displayContent(url, avatar, login) {
+        let results = document.getElementById("results");
+        results.innerHTML = '<img src="' + 
+            avatar + '" width="200">' +
+            '<h2>' + login + '</h2>' + 
+            '<a href="' + url + '">' + url + '</a>';
+    }
+    
+    let fetchPromise = getData(userEndpoint);
+    console.log(fetchPromise);
+
+    fetchPromise.then(function(fetchResponse) {
+        console.log(fetchResponse);
+        
+        let jsonPromise = convertToJson(fetchResponse);
+        console.log(jsonPromise);
+
+        jsonPromise.then(function(json){
+            displayContent(json.html_url, json.avatar_url, json.login);
+        });
+    });
+
+
+
+    </script>
+    
+</body>
+</html>
